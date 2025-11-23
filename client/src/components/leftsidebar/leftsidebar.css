@@ -1,0 +1,98 @@
+.ls {
+  background: #001030;
+  color: white;
+  height: 75vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.ls-top {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0; /* VERY IMPORTANT */
+}
+
+.ls-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ls-nav .logo {
+  max-width: 140px;
+}
+
+.ls-nav .menu img {
+  max-height: 20px;
+  opacity: 0.6;
+  cursor: pointer;
+}
+
+.search {
+  background: #002670;
+  display: flex;
+  align-items: center;
+  border-radius: 7%;
+  gap: 10px;
+  padding: 10px 14px;
+  margin-top: 20px;
+  flex: 0 0 auto; /* search box shouldn't grow */
+}
+
+.search img {
+  width: 16px;
+}
+
+.search input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: white;
+  font-size: 14px;
+}
+
+.search input::placeholder {
+  color: #c8c8c8;
+}
+
+.ls-list {
+  flex: 1; /* take remaining space */
+  min-height: 0; /* CRITICAL fix */
+  overflow-y: auto; /* enables scrolling */
+  margin-top: 20px;
+}
+
+.friends img {
+  width: 35px;
+  aspect-ratio: 1/1;
+  border-radius: 50%;
+}
+
+.friends {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.friends div {
+  display: flex;
+  flex-direction: column;
+}
+
+.friends span {
+  color: #959595;
+  font-size: 11px;
+}
+
+.friends:hover {
+  background-color: #077eff;
+}
+
+.friends:hover span {
+  color: white;
+}
