@@ -10,6 +10,7 @@ const Chat = () => {
         <ChatBox />
         <RightSideBar />
       </div>
+      
     </div>
   );
 };

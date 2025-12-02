@@ -2,8 +2,10 @@
   min-height: 100vh;
   background: linear-gradient(#566aff, #383699);
   display: flex;
-  place-items: center;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
 }
+
 .chat-container {
   width: 95%;
   height: 75vh;

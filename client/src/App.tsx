@@ -1,19 +1,20 @@
 import { Route, Routes } from "react-router-dom";
 import Login from "./pages/login/login";
 import Chat from "./pages/chat/chat";
-import Profileupdate from "./pages/profileupdate/profileupdate";
-
+import ProfileUpdate from "./pages/profileupdate/profileupdate";
+import PopUp from "./pages/popup/popup";
 
 const App = () => {
-  return(
+  return (
     <>
-    <Routes>
-      <Route path='/' element={<Login/>}/>
-      <Route path='/chat' element={<Chat/>}/>
-      <Route path='/profile' element={<Profileupdate/>}/>
-    </Routes>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/chat" element={<Chat />} />
+        <Route path="/profile" element={<ProfileUpdate />} />
+        <Route path="/chat/addcontact" element={<PopUp/>}/>
+      </Routes>
     </>
-  )
+  );
 };
 
 export default App;

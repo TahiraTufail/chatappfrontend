@@ -96,3 +96,85 @@
 .friends:hover span {
   color: white;
 }
+.ls-nav .menu {
+  position: relative;
+  padding: 10px 0px;
+}
+.menu .sub-menu {
+  position: absolute;
+  top: 100;
+  right: 0;
+  width: 130px;
+  border-radius: 5px;
+  background-color: white;
+  color: black;
+  display: none;
+  padding-left: 5px;
+  padding: 5px;
+}
+.sub-menu hr {
+  border: none;
+  height: 1px;
+  background: #a4a4a4a4;
+  margin: 8px 0px;
+}
+.sub-menu p {
+  cursor: pointer;
+  font-size: 14px;
+}
+.menu:hover .sub-menu {
+  display: block;
+}
+/* Popup background */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Popup box */
+.popup-box {
+  background: white;
+  width: 350px;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.popup-input {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.popup-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+.save-btn {
+  padding: 10px 18px;
+  background: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.cancel-btn {
+  padding: 10px 18px;
+  background: #f44336;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
