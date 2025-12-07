@@ -2,7 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import Login from "./pages/login/login";
 import Chat from "./pages/chat/chat";
 import ProfileUpdate from "./pages/profileupdate/profileupdate";
-import PopUp from "./pages/popup/popup";
+import PopUp from "./pages/profileupdate/popup/popup";
 
 const App = () => {
   return (

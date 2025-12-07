@@ -16,18 +16,17 @@ const Login = () => {
 
   // submit handler
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault(); // stop page reload
+    e.preventDefault();
 
     if (currentState === "Sign up") {
-      // call your backend here
       try {
         const response = await axios.post(
           "http://localhost:3000/users/register",
           {
-            userName: username, // ✔ correct name for backend
-            userEmail: email, // ✔ correct name for backend
-            password: password, // ✔ matches DTO
-            phoneNumber: phoneNumber, // ✔ matches DTO
+            userName: username,
+            userEmail: email,
+            password: password,
+            phoneNumber: phoneNumber,
           }
         );
 
@@ -47,7 +46,7 @@ const Login = () => {
         setEmail("");
       }
     } else {
-      // login API (example)
+      // ✅ LOGIN WITH TOKEN SAVING
       try {
         const response = await axios.post("http://localhost:3000/users/login", {
           email,
@@ -55,13 +54,27 @@ const Login = () => {
         });
 
         console.log("Login success:", response.data);
-        alert("Logged in!");
-        setPassword("");
-        setEmail("");
-        navigate("/chat");
-      } catch (error) {
-        console.log(error);
-        alert("Login failed!");
+
+        // ✅ SAVE THE TOKEN - This was missing!
+        const token = response.data.access_token || response.data.token;
+
+        if (token) {
+          localStorage.setItem("token", token);
+          // console.log(
+          //   "Token saved successfully:",
+          //   localStorage.getItem("token")
+          // );
+          alert("Logged in!");
+          setPassword(" ");
+          setEmail(" ");
+          navigate("/chat");
+        } else {
+          // console.error("No token received from server");
+          alert("Login succeeded but no token received!");
+        }
+      } catch (error: any) {
+        console.log("Login error:", error.response?.data || error);
+        alert("Login failed! Check console for details.");
       }
     }
   };
@@ -74,14 +87,24 @@ const Login = () => {
         <h2>{currentState}</h2>
 
         {currentState === "Sign up" && (
-          <input
-            type="text"
-            placeholder="username"
-            className="form-input"
-            required
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
+          <>
+            <input
+              type="text"
+              placeholder="username"
+              className="form-input"
+              required
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+            <input
+              type="text"
+              placeholder="phone number"
+              className="form-input"
+              required
+              value={phoneNumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
+            />
+          </>
         )}
 
         <input
