@@ -30,8 +30,7 @@ const Login = () => {
           }
         );
 
-        console.log("Account created:", response.status);
-        alert("Account created successfully!");
+        //console.log("Account created:", response.status);
         setUsername("");
         setPhoneNumber("");
         setPassword("");
@@ -53,18 +52,18 @@ const Login = () => {
           password,
         });
 
-        console.log("Login success:", response.data);
-
         // ✅ SAVE THE TOKEN - This was missing!
         const token = response.data.access_token || response.data.token;
+        const userID = response.data.userId;
 
-        if (token) {
+        if (token || userID) {
           localStorage.setItem("token", token);
+          localStorage.setItem("userId", userID);
           // console.log(
           //   "Token saved successfully:",
           //   localStorage.getItem("token")
           // );
-          alert("Logged in!");
+          //alert("Logged in!");
           setPassword(" ");
           setEmail(" ");
           navigate("/chat");

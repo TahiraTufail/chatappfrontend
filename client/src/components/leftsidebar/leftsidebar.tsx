@@ -3,6 +3,7 @@ import axios from "axios";
 import assets from "../../assets/assets";
 import "./leftsidebar.css";
 import { useNavigate } from "react-router-dom";
+import type { Socket } from "socket.io-client";
 
 interface ContactUser {
   id: number;
@@ -15,13 +16,21 @@ interface Contact {
   contactUser?: ContactUser;
 }
 
-const LeftSideBar = () => {
+interface LeftSideBarProps {
+  onSelectContact: (contact: Contact) => void;
+  socket: Socket;
+  isConnected: boolean;
+}
+
+const LeftSideBar = ({
+  onSelectContact,
+  socket,
+  isConnected,
+}: LeftSideBarProps) => {
   const [showPopUp, setPopUp] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [contacts, setContacts] = useState<Contact[]>([]);
-  const [debounceTimer, setDebounceTimer] = useState<ReturnType<
-    typeof setTimeout
-  > | null>(null);
+  const [debounceTimer, setDebounceTimer] = useState<any>(null);
 
   const navigate = useNavigate();
 
@@ -35,13 +44,15 @@ const LeftSideBar = () => {
       });
       setContacts(response.data);
     };
-    fetchAllContacts();
-  }, []);
+    if (contacts.length === 0) {
+      fetchAllContacts();
+    }
+  }, [contacts]);
 
   const handleSearch = async (query: string) => {
     try {
       const token = localStorage.getItem("token");
-      console.log("Token:", token); // ✅ Check if token exists
+      console.log("Token:", token);
 
       if (!token) {
         console.error("No token found - user not authenticated");
@@ -80,6 +91,14 @@ const LeftSideBar = () => {
     );
   };
 
+  const handleContactClick = (contact: Contact) => {
+    onSelectContact(contact);
+    if (isConnected) {
+      socket.emit("create-chat-room", {
+        secondUserId: contact.contactUser?.id,
+      });
+    }
+  };
   return (
     <div className="ls">
       <div className="ls-top">
@@ -88,7 +107,7 @@ const LeftSideBar = () => {
           <div className="menu">
             <img src={assets.menu_icon} alt="" />
             <div className="sub-menu">
-              <p onClick={() => navigate("/profile")}>Edit Profile</p>
+              <p onClick={() => navigate("/chat/profile")}>Edit Profile</p>
               <hr />
               <p>Logout</p>
               <hr />
@@ -117,7 +136,12 @@ const LeftSideBar = () => {
         <div className="ls-list">
           {contacts.length > 0 ? (
             contacts.map((contact) => (
-              <div key={contact.id} className="friends">
+              <div
+                key={contact.id}
+                className="friends"
+                onClick={() => handleContactClick(contact)}
+                style={{ cursor: "pointer" }}
+              >
                 <img src={assets.profile_img} alt="" />
                 <div>
                   <p>{contact.contactUser?.name || "No Name"}</p>
