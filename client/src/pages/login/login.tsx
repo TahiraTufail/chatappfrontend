@@ -20,7 +20,7 @@ const Login = () => {
 
     if (currentState === "Sign up") {
       try {
-        const response = await axios.post(
+        await axios.post(
           "http://localhost:3000/users/register",
           {
             userName: username,
