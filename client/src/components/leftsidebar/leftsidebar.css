@@ -1,11 +1,10 @@
 .ls {
   background: #001030;
   color: white;
-  height: 75vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
 }
-
 .ls-top {
   padding: 20px;
   display: flex;
@@ -13,23 +12,19 @@
   flex: 1;
   min-height: 0; /* VERY IMPORTANT */
 }
-
 .ls-nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-
 .ls-nav .logo {
   max-width: 140px;
 }
-
 .ls-nav .menu img {
   max-height: 20px;
   opacity: 0.6;
   cursor: pointer;
 }
-
 .search {
   background: #002670;
   display: flex;
@@ -40,11 +35,9 @@
   margin-top: 20px;
   flex: 0 0 auto; /* search box shouldn't grow */
 }
-
 .search img {
   width: 16px;
 }
-
 .search input {
   background: transparent;
   border: none;
@@ -52,47 +45,39 @@
   color: white;
   font-size: 14px;
 }
-
 .search input::placeholder {
   color: #c8c8c8;
 }
-
 .ls-list {
   flex: 1; /* take remaining space */
   min-height: 0; /* CRITICAL fix */
   overflow-y: auto; /* enables scrolling */
   margin-top: 20px;
 }
-
 .friends img {
   width: 35px;
   aspect-ratio: 1/1;
   border-radius: 50%;
 }
-
-.friends {
+/* .friends {
   display: flex;
   align-items: center;
   gap: 10px;
   padding: 10px 20px;
   cursor: pointer;
   font-size: 13px;
-}
-
+} */
 .friends div {
   display: flex;
   flex-direction: column;
 }
-
 .friends span {
   color: #959595;
   font-size: 11px;
 }
-
 .friends:hover {
   background-color: #077eff;
 }
-
 .friends:hover span {
   color: white;
 }
@@ -137,7 +122,6 @@
   justify-content: center;
   align-items: center;
 }
-
 /* Popup box */
 .popup-box {
   background: white;
@@ -146,7 +130,6 @@
   border-radius: 12px;
   box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.2);
 }
-
 .popup-input {
   width: 100%;
   padding: 10px;
@@ -154,13 +137,11 @@
   border-radius: 8px;
   border: 1px solid #ccc;
 }
-
 .popup-buttons {
   display: flex;
   justify-content: space-between;
   margin-top: 15px;
 }
-
 .save-btn {
   padding: 10px 18px;
   background: #4caf50;
@@ -169,7 +150,6 @@
   border-radius: 8px;
   cursor: pointer;
 }
-
 .cancel-btn {
   padding: 10px 18px;
   background: #f44336;
@@ -177,4 +157,29 @@
   border: none;
   border-radius: 8px;
   cursor: pointer;
+}
+.friends {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+}
+
+.unread-badge {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #ff4444;
+  color: white;
+  border-radius: 50%;
+  min-width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 0 6px;
 }

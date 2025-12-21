@@ -2,7 +2,8 @@ import { Route, Routes } from "react-router-dom";
 import Login from "./pages/login/login";
 import Chat from "./pages/chat/chat";
 import ProfileUpdate from "./pages/profileupdate/profileupdate";
-import PopUp from "./pages/profileupdate/popup/popup";
+import Popup from "./pages/profileupdate/popup/popup";
+import DeleteProfilePopup from "./components/leftsidebar/deletePopUp/deletepopup";
 
 const App = () => {
   return (
@@ -11,7 +12,11 @@ const App = () => {
         <Route path="/" element={<Login />} />
         <Route path="/chat" element={<Chat />} />
         <Route path="/chat/profile" element={<ProfileUpdate />} />
-        <Route path="/chat/addcontact" element={<PopUp/>}/>
+        <Route path="/chat/addcontact" element={<Popup />} />
+        <Route
+          path="/chat/deleteprofile"
+          element={<DeleteProfilePopup closePopup={() => {}} />}
+        />
       </Routes>
     </>
   );

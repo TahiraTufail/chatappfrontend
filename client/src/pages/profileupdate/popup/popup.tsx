@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 import "./popup.css";
 import { useNavigate } from "react-router-dom";
 
@@ -29,24 +30,20 @@ const AddContactPopup: React.FC<AddContactPopupProps> = ({ closePopup }) => {
     setError("");
 
     try {
-      const response = await fetch("http://localhost:3000/contacts/add", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
+      const response = await axios.post(
+        "http://localhost:3000/contacts/add",
+        {
           phoneNumber: phoneNumber,
-        }),
-      });
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to add contact");
-      }
-
-      const data = await response.json();
-      console.log("Contact added successfully:", data);
+      console.log("Contact added successfully:", response.data);
 
       // Clear the form
       setPhoneNumber("");
@@ -56,7 +53,11 @@ const AddContactPopup: React.FC<AddContactPopupProps> = ({ closePopup }) => {
       nav("/chat");
     } catch (err) {
       console.error("Error adding contact:", err);
-      setError(err instanceof Error ? err.message : "Failed to add contact");
+      if (axios.isAxiosError(err)) {
+        setError(err.response?.data?.message || "Failed to add contact");
+      } else {
+        setError("Failed to add contact");
+      }
     } finally {
       setLoading(false);
     }

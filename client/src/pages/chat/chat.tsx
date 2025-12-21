@@ -8,7 +8,10 @@ const Chat = () => {
   const [selectedContact, setSelectedContact] = useState<any>(null);
   const token = localStorage.getItem("token");
   const { socket, isConnected } = useSocket(token);
-  const [room, setRoom] = useState<any>(null);
+  const [roomDetails, setRoomDetails] = useState<any>({
+    chatRoomDetails: null,
+    recipientId: null,
+  });
 
   useEffect(() => {
     if (socket && isConnected) {
@@ -16,13 +19,15 @@ const Chat = () => {
 
       // Listen for custom events
       socket.on("chat-room-joined", (data: any) => {
-        console.log("New message received:", data);
-        setRoom(data.chatRoomId);
+        setRoomDetails({
+          chatRoomDetails: data.chatRoomDetails,
+          recipientId: data.secondUserId,
+        });
       });
 
       // Cleanup listeners
       return () => {
-        socket.off("message");
+        socket.off("chat-room-joined");
       };
     }
   }, [socket, isConnected]);
@@ -34,7 +39,12 @@ const Chat = () => {
           socket={socket!}
           isConnected={isConnected}
         />
-        <ChatBox selectedContact={selectedContact} />
+        <ChatBox
+          selectedContact={selectedContact}
+          socket={socket!}
+          isConnected={isConnected}
+          roomDetails={roomDetails}
+        />
         <RightSideBar selectedContact={selectedContact} />
       </div>
     </div>

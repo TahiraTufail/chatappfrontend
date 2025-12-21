@@ -20,17 +20,20 @@ interface LeftSideBarProps {
   onSelectContact: (contact: Contact) => void;
   socket: Socket;
   isConnected: boolean;
+  selectedContactId?: number; // Add this to track selected contact
 }
 
 const LeftSideBar = ({
   onSelectContact,
   socket,
   isConnected,
+  selectedContactId,
 }: LeftSideBarProps) => {
   const [showPopUp, setPopUp] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [debounceTimer, setDebounceTimer] = useState<any>(null);
+  const [unreadCounts, setUnreadCounts] = useState<Record<number, number>>({});
 
   const navigate = useNavigate();
 
@@ -48,6 +51,31 @@ const LeftSideBar = ({
       fetchAllContacts();
     }
   }, [contacts]);
+
+  // Listen for new messages
+  useEffect(() => {
+    if (socket && isConnected) {
+      const handleNewMessage = (data: any) => {
+        const senderId = data.senderId || data.userId;
+
+        // Only increment if the message is not from the currently selected contact
+        if (senderId && senderId !== selectedContactId) {
+          setUnreadCounts((prev) => ({
+            ...prev,
+            [senderId]: (prev[senderId] || 0) + 1,
+          }));
+        }
+      };
+
+      socket.on("receive-message", handleNewMessage);
+      socket.on("new-message", handleNewMessage);
+
+      return () => {
+        socket.off("receive-message", handleNewMessage);
+        socket.off("new-message", handleNewMessage);
+      };
+    }
+  }, [socket, isConnected, selectedContactId]);
 
   const handleSearch = async (query: string) => {
     try {
@@ -93,12 +121,23 @@ const LeftSideBar = ({
 
   const handleContactClick = (contact: Contact) => {
     onSelectContact(contact);
+
+    // Clear unread count for this contact
+    if (contact.contactUser?.id) {
+      setUnreadCounts((prev) => {
+        const newCounts = { ...prev };
+        delete newCounts[contact.contactUser!.id];
+        return newCounts;
+      });
+    }
+
     if (isConnected) {
       socket.emit("create-chat-room", {
         secondUserId: contact.contactUser?.id,
       });
     }
   };
+
   return (
     <div className="ls">
       <div className="ls-top">
@@ -109,7 +148,14 @@ const LeftSideBar = ({
             <div className="sub-menu">
               <p onClick={() => navigate("/chat/profile")}>Edit Profile</p>
               <hr />
-              <p>Logout</p>
+              <p
+                onClick={() => {
+                  localStorage.removeItem("token");
+                  navigate("/");
+                }}
+              >
+                Logout
+              </p>
               <hr />
               <p
                 onClick={() => {
@@ -118,6 +164,15 @@ const LeftSideBar = ({
                 }}
               >
                 Add Contact
+              </p>
+              <hr />
+              <p
+                onClick={() => {
+                  setPopUp(true);
+                  navigate("/chat/deleteProfile");
+                }}
+              >
+                Delete Account
               </p>
             </div>
           </div>
@@ -147,6 +202,12 @@ const LeftSideBar = ({
                   <p>{contact.contactUser?.name || "No Name"}</p>
                   <span>{contact.phoneNumber || "No Phone"}</span>
                 </div>
+                {contact.contactUser?.id &&
+                  unreadCounts[contact.contactUser.id] > 0 && (
+                    <div className="unread-badge">
+                      {unreadCounts[contact.contactUser.id]}
+                    </div>
+                  )}
               </div>
             ))
           ) : (
